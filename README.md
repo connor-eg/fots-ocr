@@ -7,7 +7,7 @@ This is an Android app that takes images of the terminal minigame from the Fallo
 ## How does it work?
 TODO: update this section with some incredibly boring math
 
-## But why make this?
+## But why make this? I mean who would use this *trash*?
 This project is intended to both test my capabilities in Kotlin/Android Studio, and my ability to learn new technologies that I have never encountered before (specifically, Google's implementation of OCR for Android).
 
 ## TERMS OF USE
