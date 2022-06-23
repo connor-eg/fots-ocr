@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Fallout Terminal Solver</title>
+		<script>
+			'use strict';
+			
+			var wordList = [];
+			var wordLength;
+			
+			function populateList() {
+				let wordStr = document.getElementById("words").value.toLowerCase() + " "; //Gets the word list, converts it to lowercase, and adds a trailing space for later
+				let curWord = "";
+				let compLtr = "";
+				
+				for(let i = 0; i < wordStr.length; i++){
+					compLtr = wordStr.charAt(i);
+					if(compLtr.toLowerCase() != compLtr.toUpperCase()){ //Handy comparison to tell if a character is a letter or not
+						curWord += compLtr;
+					} else {
+						if(curWord){ //If the program hits a space/comma and there IS a word to push to the list, push it
+							wordList.push({word: curWord, variance: 0});
+							curWord = "";
+						} //Otherwise, there are multiple non-words next to each other (like two spaces) and these can be ignored
+					}
+				}
+				if(wordList.length == 0) return;
+				wordLength = wordList[0].word.length;
+				return;
+			}
+
+			//Calculates the similSrity between two words
+			function calculateSimilarity(w1, w2) {
+				var ans = 0;
+				for (let i = 0; i < w1.length; i++) {
+					if (w1[i] == w2[i]) {
+						ans += 1;
+					}
+				}
+				return ans;
+			}
+
+			//Determines the variance in a set of numbers
+			function calculateVariance(numarr) {
+				let variance = 0;
+				//Get the mean of numarr
+				numarr.forEach(val => {
+					variance += val;
+				});
+				variance /= numarr.length;
+
+				//Store each value minus the mean into numarr, then square each value
+				for (let i = 0; i < numarr.length; i++) {
+					numarr[i] -= variance;
+					numarr[i] *= numarr[i];
+				}
+
+				//Get the sum of the squares
+				variance = 0;
+				numarr.forEach(val => {
+					variance += val;
+				});
+
+				//Normally, you would divide the sum of squares by numarr.length, but that can be omitted in this case because we only care about which word has the smallest variance (which wouldn't change)
+				return variance;
+			}
+
+			//Mathematically determines the best word to pick to narrow down the list quickly
+			function pickBestWord() {
+				//Generates a list of match numbers starting at 0 for each possible number of matches
+				var matchNumbers = [];
+				for (let i = 0; i < wordLength; i++) {
+					matchNumbers.push(0); 
+				}
+
+				for (var i = 0; i < wordList.length; i++) {
+					matchNumbers = matchNumbers.map((a) => {
+						return 0;
+					});
+					//This block generates the match numbers for the ith word in the list
+					for (var k = 0; k < wordList.length; k++) {
+						if (i == k) continue; //No need to compare a word against itself
+						let similarity = calculateSimilarity(wordList[i].word, wordList[k].word);
+						matchNumbers[similarity] += 1;
+					}
+					//Then we calculate the variance in those numbers and save that to the object in wordList
+					wordList[i].variance = calculateVariance(matchNumbers);
+				}
+
+				//Figure out the best word and return its index
+				let lowestVariance = wordList[0].variance;
+				let bestWordIndex = 0;
+				wordList.forEach((val, index) => {
+					if (val.variance < lowestVariance) {
+						bestWordIndex = index;
+						lowestVariance = val.variance;
+					}
+				});
+				return bestWordIndex;
+			}
+
+			//Removes a set of words from the list using a set similarity
+			function reevaluateList(indexChosen, similarity) {
+				var wordToCheck = wordList[indexChosen].word;
+				//Every word that doesn't have the correct similarity to the chosen word is removed from the list (including the chosen word)
+				for (let i = 0; i < wordList.length; i++) {
+					if (calculateSimilarity(wordToCheck, wordList[i].word) != similarity) {
+						wordList.splice(i, 1);
+						i--;
+					}
+				}
+				return;
+			}
+			//----------------------------//
+			//          runtime           //
+			//----------------------------//
+
+			function beginSolve(){
+				if(wordList.length == 0) { //wordList has not been populated yet
+					populateList();
+					if(wordList.length != 0){
+						let bes = pickBestWord();
+						document.getElementById("resultsPane").innerHTML = 'Try the word "' + wordList[bes].word + '" then enter its similarity in the box above and hit "solve"';
+					} else {//In the event that the user pressed solve before inputting any words
+						document.getElementById("resultsPane").innerHTML = 'Please input a list of words in the word list before pressing "solve"';
+					}
+				} else if(!document.getElementById("sim").value){ //Should be the first things that happens after pressing solve
+					let bes = pickBestWord();
+					document.getElementById("resultsPane").innerHTML += 'Try the word "' + wordList[bes].word + '" then enter its similarity in the box above and hit "solve"';
+				} else { //We can start eliminating words and getting a result
+					let bes = pickBestWord();
+					let input = document.getElementById("sim").value;
+					
+					reevaluateList(bes, input);
+					if (wordList.length == 1) {
+						document.getElementById("resultsPane").innerHTML = 'Done! The correct word is ' + wordList[0].word + '\n';
+					} else {
+						document.getElementById("resultsPane").innerHTML = "List of remaining possible words: ";
+						wordList.forEach(entry => {
+							document.getElementById("resultsPane").innerHTML += entry.word + " ";
+						})
+						bes = pickBestWord();
+						document.getElementById("resultsPane").innerHTML += '\n\n';
+						document.getElementById("resultsPane").innerHTML += 'Try the word "' + wordList[bes].word + '" then enter its similarity in the box above and hit "solve"';
+					}
+				}
+			}
+		</script>
+	</head>
+	<body>
+	<header>
+		<p style="font-variant: small-caps">The Fallout Terminal Solver</p>
+	</header>
+	<form>
+		<input placeholder="Initial word list" id="words" type="text" size="98"><br>
+		<input placeholder="Similarity (given in-game)" id="sim" type="number"><br>
+	</form>
+	<button type="button" onclick="beginSolve()">Solve</button><br>
+	<textarea id="resultsPane" readonly rows="20" cols="100">The initial word list should be all of the words that appear on the terminal, separated by spaces or any other non-letter character</textarea>
+	</body>
+</html>
