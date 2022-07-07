@@ -1,5 +1,5 @@
 # fots-ocr
-Fallout Terminal Solver with OCR
+Fallout Terminal Solver with OCR (on haitus while I'm learning Java)
 
 ## What does it do?
 This is an Android app that, when it is complete, will take images of the terminal minigame from the Fallout series, and recommend the best word to pick until the minigame is solved. For fans of Fallout who are bored to tears with the minigame, this provides a more interesting way to breeze through it than just clicking random words and hoping for the best (or installing mods that bypass it entirely).
