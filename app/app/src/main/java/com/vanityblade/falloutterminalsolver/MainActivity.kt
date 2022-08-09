@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        val solver = TerminalSolver()
         findViewById<Button>(R.id.optionOCR).setOnClickListener { optionOCRClicked() }
         findViewById<Button>(R.id.optionManual).setOnClickListener { optionManualClicked() }
     }

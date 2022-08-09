@@ -90,6 +90,10 @@ class TerminalSolver {
         return variance
     }
 
+    fun getWordList(): MutableList<String> {
+        return wordList
+    }
+
     //Lots of helper functions
     fun editWord(oldWord: String, newWord: String): TerminalSolver {
         val i: Int = wordList.indexOf(oldWord)
