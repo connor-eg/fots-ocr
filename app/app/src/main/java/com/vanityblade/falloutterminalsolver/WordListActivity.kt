@@ -1,8 +1,6 @@
 package com.vanityblade.falloutterminalsolver
 
-import android.app.ProgressDialog.show
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
