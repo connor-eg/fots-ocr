@@ -1,6 +1,8 @@
 package com.vanityblade.falloutterminalsolver
 
-class TerminalSolver {
+import android.util.Log
+
+object TerminalSolver {
     //The list of words
     private var wordList: MutableList<String> = mutableListOf<String>()
 
@@ -94,6 +96,10 @@ class TerminalSolver {
         return wordList
     }
 
+    fun getWordListSize(): Int {
+        return wordList.size
+    }
+
     //Lots of helper functions
     fun editWord(oldWord: String, newWord: String): TerminalSolver {
         val i: Int = wordList.indexOf(oldWord)
@@ -109,6 +115,7 @@ class TerminalSolver {
 
     fun addWord(newWord: String): TerminalSolver {
         wordList.add(newWord)
+        Log.v("TerminalSolver", "Added the word [$newWord], word count is now ${wordList.size}")
         return this
     }
 
