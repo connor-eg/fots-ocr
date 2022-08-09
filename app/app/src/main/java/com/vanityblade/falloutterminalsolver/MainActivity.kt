@@ -1,5 +1,6 @@
 package com.vanityblade.falloutterminalsolver
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Base64DataException
@@ -19,6 +20,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun optionManualClicked() {
         Log.v(TAG, "manual was clicked")
+        //Change activity to the word list screen
+        val intent = Intent(this@MainActivity, WordListActivity::class.java)
+        startActivity(intent)
         /**
          * 1. Show the user an empty list with "add word" button
          * 2. Allow the user to add an arbitrary number of words

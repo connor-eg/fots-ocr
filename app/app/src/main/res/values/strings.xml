@@ -3,4 +3,9 @@
     <string name="friendlyIntro">Welcome to the Fallout Terminal Solver! Choose one of the methods below to begin automatically solving a puzzle.</string>
     <string name="optionOCR_text">Take a picture!</string>
     <string name="optionManual_text">Enter text manually</string>
+    <string name="addWordButton">Add a new word</string>
+    <string name="wordListInstructions">Ensure that all of the words below are correct, then press the SOLVE button below.</string>
+    <string name="solveButtonText">SOLVE</string>
+    <string name="accessibility_wordBoxText">List of words used to solve the puzzle</string>
+    <string name="accessibility_addWordButton">Add a word</string>
 </resources>
