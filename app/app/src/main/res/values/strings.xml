@@ -9,4 +9,6 @@
     <string name="accessibility_wordBoxText">List of words used to solve the puzzle</string>
     <string name="accessibility_addWordButton">Add a word</string>
     <string name="emptyListText">The list is empty. Try adding some words!</string>
+    <string name="deletionOkButton">OK</string>
+    <string name="deletionCancelButton">Cancel</string>
 </resources>
