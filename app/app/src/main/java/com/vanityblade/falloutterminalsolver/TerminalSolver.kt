@@ -11,15 +11,15 @@ object TerminalSolver {
 
     //The meat of the solver. Returns the index of the best word to use
     fun solve(): Int {
-        val matchNumbers: MutableList<Int> = mutableListOf()
-        (0..wordList.size).forEach { _ -> matchNumbers.add(0) }
+        var matchNumbers: MutableList<Int> = mutableListOf()
+        for (i in 0..wordList.size) { matchNumbers.add(0) }
         var lowestVariance: Double = Double.POSITIVE_INFINITY //The lowest variance found so far
         var lowestVarianceIndex: Int = -1 //The value to be returned
         //Generate and use match numbers for each word
-        for (i in 0..wordList.size) {
-            matchNumbers.forEachIndexed { index, _ -> matchNumbers[index] = 0 }
-            for (k in 0..wordList.size) {
-                if (i == k) continue
+        for (i in 0 until wordList.size) {
+            matchNumbers = matchNumbers.map{0} as MutableList<Int> //Empty out the list of matchNumbers for each word to recalculate variance
+            for (k in 0 until wordList.size) {
+                if (i == k) continue //Don't compare a word against itself
                 matchNumbers[calcSimilarity(wordList[i], wordList[k])]++
             }
             val curVariance = calcVariance(matchNumbers)
@@ -35,16 +35,16 @@ object TerminalSolver {
     //Shortens the word list, eliminating words that do not have the correct match number
     //  with the given word
     fun eliminate(compareWord: String, matchNumber: Int): TerminalSolver {
-        val wordsToEliminate: MutableList<String> = mutableListOf()
-        for (i in 0..wordList.size) {
+        val wordsToEliminate: MutableList<Int> = mutableListOf()
+        for (i in 0 until wordList.size) {
             if (calcSimilarity(compareWord, wordList[i]) != matchNumber) {
-                wordsToEliminate.add(wordList[i])
+                wordsToEliminate.add(i) //The list SHOULD be in sorted order from smallest to largest index at this point
             }
         }
-        //This implementation is slow because it searches the list each time for each word
-        //  However, this was fast to implement and the list is ~20 elements at max
-        for (word in wordsToEliminate) {
-            delWord(word)
+
+        //Why is it an index when the items are on their way out???
+        for (index in wordsToEliminate.reversed()) {
+            delWord(index)
         }
         return this
     }
@@ -52,15 +52,16 @@ object TerminalSolver {
     //Finds the similarity between two words
     private fun calcSimilarity(word1: String, word2: String): Int {
         var similarity = 0
-        for (i in 0..word1.length) {
-            if (word1[i] == word2[i]) similarity++
+        val comp1 = word1.lowercase()
+        val comp2 = word2.lowercase()
+        for (i in 0 until word1.length) {
+            if (comp1[i] == comp2[i]) similarity++
         }
         return similarity
     }
 
     //Calculate the variance of a set of integers
     private fun calcVariance(matchNumbersINT: MutableList<Int>): Double {
-        if (matchNumbersINT.isEmpty()) return 0.0
         //Converting ints to doubles the stupid way
         val matchNumbers: MutableList<Double> = mutableListOf()
         for (num in matchNumbersINT) {
@@ -75,7 +76,7 @@ object TerminalSolver {
         variance /= matchNumbers.size
 
         //Store each value minus the mean into matchNumbers, then square them
-        for (i in 0..matchNumbers.size) {
+        for (i in 0 until matchNumbers.size) {
             matchNumbers[i] -= variance
             matchNumbers[i] *= matchNumbers[i]
         }

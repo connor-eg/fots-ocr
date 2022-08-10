@@ -55,7 +55,7 @@
             android:divider="@drawable/spacer4px"
             android:dividerPadding="4dp"
             android:orientation="vertical"
-            android:showDividers="middle" />
+            android:showDividers="middle|end" />
     </ScrollView>
 
     <Button

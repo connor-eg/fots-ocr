@@ -13,4 +13,11 @@
     <string name="deletionCancelButton">Cancel</string>
     <string name="addWordFloatButton">Add</string>
     <string name="editWordActionText">Update</string>
+    <string name="pressSolveHintToast">Press solve again to get the next best word to pick.</string>
+    <string name="nonAlphaHintToast">At least one of the words contains non-letter characters! Please edit that word and retry solving.</string>
+    <string name="wrongSizeHintToast">At least of the words in the list has a different size than the rest! Please edit that word and retry solving.</string>
+    <string name="tooFewItemsHintToast">The number of words in the list is too low for automatic solving to be useful.</string>
+    <string name="addWordUserPrompt">Type a word to add to the list.</string>
+    <string name="tryWordUserPrompt">Try the word above, then input the number of matching letters the game gives you and press OK.</string>
+    <string name="parseFailHintToast">Could not parse that number. Please press solve and try again.</string>
 </resources>

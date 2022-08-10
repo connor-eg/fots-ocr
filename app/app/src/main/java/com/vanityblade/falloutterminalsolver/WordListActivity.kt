@@ -27,12 +27,14 @@ class WordListActivity : AppCompatActivity() {
         val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
         val input = EditText(this)
         dialogBuilder.setView(input)
-        dialogBuilder.setMessage("Type a word to add to the list.")
+        dialogBuilder.setMessage(getString(R.string.addWordUserPrompt))
             .setCancelable(true)
             .setPositiveButton(R.string.addWordFloatButton) { _, _ ->
                 run {
-                    TerminalSolver.addWord(input.text.toString())
-                    renderWordList()
+                    if (input.text.toString() != "") {
+                        TerminalSolver.addWord(input.text.toString())
+                        renderWordList()
+                    }
                 }
             }
             .setNegativeButton(R.string.deletionCancelButton, null)
@@ -41,25 +43,47 @@ class WordListActivity : AppCompatActivity() {
 
     private fun solveButtonHandler() {
         Log.v(TAG, "Solve button clicked")
-        //TODO: Run the solve function in TerminalSolver.kt
         //Validate the words in the list before attempting to solve. Properly formed words may
         // not have numbers and must all be the same length.
-        if(TerminalSolver.getWordListSize() <= 2) { //No need to solve if the list is too small.
-            simpleMessage("The number of words in the list is too low for automatic solving to be useful.")
+        if (TerminalSolver.getWordListSize() <= 2) { //No need to solve if the list is too small.
+            simpleMessage(getString(R.string.tooFewItemsHintToast))
             return
         }
         val correctWordLength = TerminalSolver.getWord(0).length
-        for(word in TerminalSolver.getWordList()){
-            if(word.length != correctWordLength) {
-                simpleMessage("At least of the words in the list has a different size than the rest! Please edit that word and retry solving.")
+        for (word in TerminalSolver.getWordList()) {
+            if (word.length != correctWordLength) {
+                simpleMessage(getString(R.string.wrongSizeHintToast))
                 return
             }
-            if(word.contains(Regex("[^A-Za-z]"))){
-                simpleMessage("At least one of the words contains non-letter characters! Please edit that word and retry solving.")
+            if (word.contains(Regex("[^A-Za-z]"))) {
+                simpleMessage(getString(R.string.nonAlphaHintToast))
                 return
             }
         }
-        simpleMessage("Valid solvable!")
+        //Get the best word
+        val bestWordIndex = TerminalSolver.solve()
+        val bestWordText = TerminalSolver.getWord(bestWordIndex)
+        //Display the "how many letters matched" prompt to eliminate words.
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+        val input = EditText(this)
+        dialogBuilder.setView(input)
+        dialogBuilder.setTitle(bestWordText.uppercase())
+        dialogBuilder.setMessage(getString(R.string.tryWordUserPrompt))
+            .setCancelable(true)
+            .setPositiveButton(R.string.okButton) { _, _ ->
+                run {
+                    try {
+                        TerminalSolver.eliminate(bestWordText, input.text.toString().toInt())
+                        simpleMessage(getString(R.string.pressSolveHintToast))
+                        renderWordList()
+                    } catch (e: NumberFormatException) {
+                        simpleMessage(getString(R.string.parseFailHintToast))
+                    }
+                }
+            }
+            .setNegativeButton(R.string.deletionCancelButton, null)
+            .show()
+        //Nothing left to do here until words are eliminated from the list.
     }
 
     //Should be called any time the list of words is updated.
@@ -112,8 +136,10 @@ class WordListActivity : AppCompatActivity() {
             .setCancelable(true)
             .setPositiveButton(R.string.editWordActionText) { _, _ ->
                 run {
-                    TerminalSolver.editWord(index, input.text.toString())
-                    renderWordList()
+                    if (input.text.toString() != "") {
+                        TerminalSolver.editWord(index, input.text.toString())
+                        renderWordList()
+                    }
                 }
             }
             .setNegativeButton(R.string.deletionCancelButton, null)
@@ -121,7 +147,7 @@ class WordListActivity : AppCompatActivity() {
     }
 
     //Tell the user something with a message that has no interaction other than closing it.
-    private fun simpleMessage(msg: String){
+    private fun simpleMessage(msg: String) {
         makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
     }
 }
