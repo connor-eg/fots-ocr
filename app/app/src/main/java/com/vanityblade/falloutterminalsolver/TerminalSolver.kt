@@ -4,14 +4,14 @@ import android.util.Log
 
 object TerminalSolver {
     //The list of words
-    private var wordList: MutableList<String> = mutableListOf<String>()
+    private var wordList: MutableList<String> = mutableListOf()
 
     //When the list is finalized
     private var noMoreEliminations: Boolean = false
 
     //The meat of the solver. Returns the index of the best word to use
     fun solve(): Int {
-        val matchNumbers: MutableList<Int> = mutableListOf<Int>()
+        val matchNumbers: MutableList<Int> = mutableListOf()
         (0..wordList.size).forEach { _ -> matchNumbers.add(0) }
         var lowestVariance: Double = Double.POSITIVE_INFINITY //The lowest variance found so far
         var lowestVarianceIndex: Int = -1 //The value to be returned
@@ -35,7 +35,7 @@ object TerminalSolver {
     //Shortens the word list, eliminating words that do not have the correct match number
     //  with the given word
     fun eliminate(compareWord: String, matchNumber: Int): TerminalSolver {
-        val wordsToEliminate: MutableList<String> = mutableListOf<String>()
+        val wordsToEliminate: MutableList<String> = mutableListOf()
         for (i in 0..wordList.size) {
             if (calcSimilarity(compareWord, wordList[i]) != matchNumber) {
                 wordsToEliminate.add(wordList[i])
@@ -62,7 +62,7 @@ object TerminalSolver {
     private fun calcVariance(matchNumbersINT: MutableList<Int>): Double {
         if (matchNumbersINT.isEmpty()) return 0.0
         //Converting ints to doubles the stupid way
-        val matchNumbers: MutableList<Double> = mutableListOf<Double>()
+        val matchNumbers: MutableList<Double> = mutableListOf()
         for (num in matchNumbersINT) {
             matchNumbers.add(num.toDouble())
         }

@@ -51,7 +51,11 @@
             android:id="@+id/wordListLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:layout_margin="4dp"
+            android:divider="@drawable/spacer4px"
+            android:dividerPadding="4dp"
+            android:orientation="vertical"
+            android:showDividers="middle" />
     </ScrollView>
 
     <Button
