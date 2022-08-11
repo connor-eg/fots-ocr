@@ -12,7 +12,7 @@ object TerminalSolver {
     //The meat of the solver. Returns the index of the best word to use
     fun solve(): Int {
         var matchNumbers: MutableList<Int> = mutableListOf()
-        for (i in 0..wordList.size) { matchNumbers.add(0) }
+        for (i in 0..wordList[0].length) { matchNumbers.add(0) }
         var lowestVariance: Double = Double.POSITIVE_INFINITY //The lowest variance found so far
         var lowestVarianceIndex: Int = -1 //The value to be returned
         //Generate and use match numbers for each word

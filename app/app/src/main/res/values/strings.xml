@@ -4,7 +4,7 @@
     <string name="optionOCR_text">Take a picture!</string>
     <string name="optionManual_text">Enter text manually</string>
     <string name="addWordButton">Add a new word</string>
-    <string name="wordListInstructions">Ensure that all of the words below are correct, then press the SOLVE button below.</string>
+    <string name="wordListInstructions">Ensure that all of the words below are correct, then press the SOLVE button below.\nTap a word you\'ve entered to edit it, long press a word to delete it.</string>
     <string name="solveButtonText">SOLVE</string>
     <string name="accessibility_wordBoxText">List of words used to solve the puzzle</string>
     <string name="accessibility_addWordButton">Add a word</string>
@@ -15,7 +15,7 @@
     <string name="editWordActionText">Update</string>
     <string name="pressSolveHintToast">Press solve again to get the next best word to pick.</string>
     <string name="nonAlphaHintToast">At least one of the words contains non-letter characters! Please edit that word and retry solving.</string>
-    <string name="wrongSizeHintToast">At least of the words in the list has a different size than the rest! Please edit that word and retry solving.</string>
+    <string name="wrongSizeHintToast">At least one of the words in the list has a different size than the rest! Please edit that word and retry solving.</string>
     <string name="tooFewItemsHintToast">The number of words in the list is too low for automatic solving to be useful.</string>
     <string name="addWordUserPrompt">Type a word to add to the list.</string>
     <string name="tryWordUserPrompt">Try the word above, then input the number of matching letters the game gives you and press OK.</string>
