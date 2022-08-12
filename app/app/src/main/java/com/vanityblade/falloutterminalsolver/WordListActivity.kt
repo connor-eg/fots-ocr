@@ -8,6 +8,8 @@ import android.widget.*
 import android.widget.Toast.makeText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.core.view.get
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private const val TAG: String = "WordListActivity"
@@ -50,15 +52,25 @@ class WordListActivity : AppCompatActivity() {
             return
         }
         val correctWordLength = TerminalSolver.getWord(0).length
-        for (word in TerminalSolver.getWordList()) {
+        //All offending words are marked with red and given back to the user.
+        var failureFlag = 0
+        for ((index, word) in TerminalSolver.getWordList().withIndex()) {
             if (word.length != correctWordLength) {
-                simpleMessage(getString(R.string.wrongSizeHintToast))
-                return
+                failureFlag = 1
+                recolor(index, R.color.errorRed)
             }
             if (word.contains(Regex("[^A-Za-z]"))) {
-                simpleMessage(getString(R.string.nonAlphaHintToast))
-                return
+                failureFlag = 2
+                recolor(index, R.color.errorRed)
             }
+        }
+        //If a failure was caused, display that here
+        if(failureFlag == 1){
+            simpleMessage(getString(R.string.wrongSizeHintToast))
+            return
+        } else if (failureFlag == 2){
+            simpleMessage(getString(R.string.nonAlphaHintToast))
+            return
         }
         //Get the best word
         val bestWordIndex = TerminalSolver.solve()
@@ -130,6 +142,7 @@ class WordListActivity : AppCompatActivity() {
     private fun handleWordEdit(word: String, index: Int) {
         val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
         val input = EditText(this)
+        recolor(index, R.color.wlCardDefault)
         input.setText(word)
         dialogBuilder.setView(input)
         dialogBuilder.setMessage("Editing the word '$word'")
@@ -149,5 +162,10 @@ class WordListActivity : AppCompatActivity() {
     //Tell the user something with a message that has no interaction other than closing it.
     private fun simpleMessage(msg: String) {
         makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
+    }
+
+    private fun recolor(index: Int, colorId: Int){
+        val textContainer = findViewById<LinearLayout>(R.id.wordListLinearLayout)
+        (textContainer[index] as CardView).setCardBackgroundColor(getColor(colorId))
     }
 }
