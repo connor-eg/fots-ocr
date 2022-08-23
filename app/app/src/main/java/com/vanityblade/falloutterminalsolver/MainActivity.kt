@@ -14,6 +14,7 @@ private const val TAG: String = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
     //ActivityResultLauncher used when getting a picture for OCR purposes.
+    //Its lambda function runs when an image is successfully taken from the camera (and attempts to load the word list).
     private val getImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { res -> run{
         Log.v(TAG, "GOT BACK [$res]")
         TextRecognitionHandler.analyzeImage(res)
