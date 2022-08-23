@@ -9,7 +9,8 @@ Update on this goal: The OCR implementation via ML Kit is... terrible. It mixes 
 ## How does it work?
 Boring time!
 The terminal minigame can be described like this: Given a list of words, pick the correct word. When an incorrect word is picked, you only learn how many letters the correct word has in common with your word (meaning the same letter in the same position).
-For example, given the words MIGHT and SIGHT, these have four letters in common (\_IGHT). WORDS and SWORD have zero letters in common (_____). Not knowing the correct word in advance, my program attempts to provide the best guess to the user.
+
+For example, given the words MIGHT and SIGHT, these have four letters in common (\_IGHT). WORDS and SWORD have zero letters in common (_____) despite being anagrams. Not knowing the correct word in advance, my program attempts to provide the best guess to the user.
 So how do I define the best guess? In this case, it means the word that eliminates the most other words at once from the list regardless of the actual correct word. 
 
 Here's a puzzle. Consider the three "words" AAAAA, AAAAZ, and ZAAAA. You have two guesses, and the correct word is never the first one you pick. It has an equal chance to be either of the words you did not pick.
