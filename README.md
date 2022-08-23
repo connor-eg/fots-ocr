@@ -3,6 +3,7 @@ Fallout Terminal Solver with OCR
 
 ## What does it do?
 This is an Android app that, when it is complete, will take images of the terminal minigame from the Fallout series, and recommend the best word to pick until the minigame is solved. For fans of Fallout who are bored to tears with the minigame, this provides a more interesting way to breeze through it than just clicking random words and hoping for the best (or installing mods that bypass it entirely).
+
 Update on this goal: The OCR implementation via ML Kit is... terrible. It mixes up letters constantly (not great), inconsistently recognizes symbols (bad), and sometimes picks up lines out of order (very bad). I have been coming up with ideas to make it better, but I don't think I'll ever be able to finagle it into working the way I originally intended.
 
 ## How does it work?
@@ -10,9 +11,11 @@ Boring time!
 The terminal minigame can be described like this: Given a list of words, pick the correct word. When an incorrect word is picked, you only learn how many letters the correct word has in common with your word (meaning the same letter in the same position).
 For example, given the words MIGHT and SIGHT, these have four letters in common (\_IGHT). WORDS and SWORD have zero letters in common (_____). Not knowing the correct word in advance, my program attempts to provide the best guess to the user.
 So how do I define the best guess? In this case, it means the word that eliminates the most other words at once from the list regardless of the actual correct word. 
+
 Here's a puzzle. Consider the three "words" AAAAA, AAAAZ, and ZAAAA. You have two guesses, and the correct word is never the first one you pick. It has an equal chance to be either of the words you did not pick.
 Under the rules above, if you pick AAAAA, the number you get back is always four. This tells you nothing about whether AAAAZ or ZAAAA is correct.
 By contrast, if you pick AAAAZ, it has four letters in common with AAAAA and three in common with ZAAAA. This means that when you get the number back you know for certain which word is correct.
+
 My program does this on a larger scale. Solving works like this:
 1. For each word in the list, count all of the letters it has in common with every other word. I call these "match numbers"
     For the AAAAA/AAAAZ/ZAAAA example above, AAAAZ's match numbers would be 0/0/0/1/1. This is because there are zero words that it shares 0, 1, or 2 letters with, and 1 word that it shares 3 and 4 letters with.
